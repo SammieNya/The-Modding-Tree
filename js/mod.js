@@ -3,7 +3,7 @@ let modInfo = {
 	id: "DarwinEvolve",
 	author: "Sammie",
 	pointsName: "Points",
-	discordName: "",
+	discordName: "Sammie",
 	discordLink: "",
 	changelogLink: "https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md",
 	initialStartPoints: new Decimal (10), // Used for hard resets and new players
@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "0.1",
+	name: "Quarks",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
@@ -36,6 +36,7 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	if(hasUpgrade("q", 11)) gain = gain.mul(2)
 	return gain
 }
 
