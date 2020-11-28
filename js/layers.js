@@ -35,13 +35,26 @@ addLayer("q", {
         11: {
             description: "Blah",
             cost: new Decimal(1),
-        }
+        },
+        12: {
+            title: "More Up Quarks",
+            description: "Makes Up Quarks scale at half speed.",
+            cost: new Decimal(1),
+            currencyDisplayName: "Up Quarks",
+            currencyLocation() {return player[this.layer].buyables},
+            currencyInternalName: 11,
+        },
     },
     buyables: {
         rows: 1,
-        cols: 1,
+        cols: 2,
         11: { 
-            cost(x) { return new Decimal(1).mul(new Decimal (1.5).pow(player.q.buyables[11])) },
+            title: "Up Quarks",
+            cost(x) { if (hasUpgrade("q", 12)) {
+                return new Decimal(1).mul(new Decimal (1.25).pow(player.q.buyables[11]))
+            } else {
+                return new Decimal(1).mul(new Decimal (1.5).pow(player.q.buyables[11]))
+            } },
             display() { return "Cost: " + format(this.cost()) + " Quarks. Amount: " + formatWhole(player.q.buyables[11])},
             canAfford() { return player[this.layer].points.gte(this.cost())},
             buy(){
@@ -49,9 +62,20 @@ addLayer("q", {
                 player[this.layer].buyables[11] = player[this.layer].buyables[11].add(1)
             },
         },
+        12: {
+            title: "Down Quarks",
+            cost(x) {return new Decimal(2.14).mul(new Decimal (1.25).pow(player.q.buyables[12]))},
+            display() { return "Cost: " + format(this.cost(x)) + " Up Quarks. Amount: " + formatWhole(player.q.buyables[12])},
+            canAfford() {return player[this.layer].buyables[11].gte(this.cost())},
+            buy(){
+                player[this.layer].buyables[11] = player[this.layer].buyables[11].sub(this.cost())
+                player[this.layer].buyables[12] = player[this.layer].buyables[12].add(1)
+            },
+            currencyInternalName: 11,
+        },
 }
 })
-addLayer("H", {
+addLayer("h", {
     name: "Hadrons",
     symbol: "H",
     positon: 0,
@@ -64,8 +88,7 @@ addLayer("H", {
     resource: "Hadrons",
     row: 1,
     baseResource: "Quarks",
-    baseAmount() {return player.points},
-    requires: new Decimal(1),
+    baseAmount() {return player.q.points},
     type: "normal",
     exponent: 0.5,
     gainMult() {
@@ -74,6 +97,7 @@ addLayer("H", {
     gainExp() {
         return new Decimal (1)
     },
+    currencyLayer: "q",
     layerShown() { if (hasUpgrade ("q", 11)) return true, {
         
     } }
