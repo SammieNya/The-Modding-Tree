@@ -41,7 +41,7 @@ addLayer("q", {
         rows: 1,
         cols: 1,
         11: { 
-            cost(x) { return new Decimal(1).mul(new Decimal (1.15).pow(player.q.buyables[11])) },
+            cost(x) { return new Decimal(1).mul(new Decimal (1.5).pow(player.q.buyables[11])) },
             display() { return "Cost: " + format(this.cost()) + " Quarks. Amount: " + formatWhole(player.q.buyables[11])},
             canAfford() { return player[this.layer].points.gte(this.cost())},
             buy(){
