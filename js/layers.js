@@ -24,7 +24,9 @@ addLayer("q", {
     hotkeys: [
         {key: "p", description: "Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){ return true },
+    layerShown(){ if (player.points >= 0) return true, {
+        
+    } },
     
     upgrades: {
         rows: 5,
@@ -32,7 +34,47 @@ addLayer("q", {
         
         11: {
             description: "Blah",
-            cost: new Decimal(10),
+            cost: new Decimal(1),
         }
     },
+    buyables: {
+        rows: 1,
+        cols: 1,
+        11: { 
+            cost(x) { return new Decimal(1).mul(new Decimal (1.15).pow(player.q.buyables[11])) },
+            display() { return "Cost: " + format(this.cost()) + " Quarks. Amount: " + formatWhole(player.q.buyables[11])},
+            canAfford() { return player[this.layer].points.gte(this.cost())},
+            buy(){
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
+                player[this.layer].buyables[11] = player[this.layer].buyables[11].add(1)
+            },
+        },
+}
+})
+addLayer("H", {
+    name: "Hadrons",
+    symbol: "H",
+    positon: 0,
+    startData() { return {
+        unlocked: true,
+        points: new Decimal(0),
+    }},
+    color: "#FFFFFF",
+    requires: new Decimal(100),
+    resource: "Hadrons",
+    row: 1,
+    baseResource: "Quarks",
+    baseAmount() {return player.points},
+    requires: new Decimal(1),
+    type: "normal",
+    exponent: 0.5,
+    gainMult() {
+        return new Decimal(1)
+    },
+    gainExp() {
+        return new Decimal (1)
+    },
+    layerShown() { if (hasUpgrade ("q", 11)) return true, {
+        
+    } }
 })
