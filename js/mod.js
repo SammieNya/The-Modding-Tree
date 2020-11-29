@@ -13,8 +13,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.11",
-	name: "Quarks",
+	num: "0.12",
+	name: "Down Quarks",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
@@ -37,8 +37,8 @@ function getPointGen() {
 
 	let gain = new Decimal(1)
 	if(hasUpgrade("q", 11)) gain = gain.mul(200)
+	gain = gain.mul(buyableEffect("q", 12)).add(1)
 	gain = gain.add(buyableEffect("q", 11))
-	gain = gain.mul(buyableEffect("q", 12))
 	
 	return gain
 }
