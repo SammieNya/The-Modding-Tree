@@ -36,7 +36,6 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if(hasUpgrade("q", 11)) gain = gain.mul(200)
 	gain = gain.mul(buyableEffect("q", 12)).add(1)
 	gain = gain.add(buyableEffect("q", 11))
 	

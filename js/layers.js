@@ -1,4 +1,5 @@
 addLayer("q", {
+    branches: ["h"],
     name: "Quarks", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Q", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -33,10 +34,6 @@ addLayer("q", {
         cols: 5,
         
         11: {
-            description: "Blah",
-            cost: new Decimal(1),
-        },
-        12: {
             title: "More Up Quarks",
             description: "Makes Up Quarks scale at half speed.",
             cost: new Decimal(1),
@@ -50,7 +47,7 @@ addLayer("q", {
         cols: 2,
         11: { 
             title: "Up Quarks",
-            cost(x) { if (hasUpgrade("q", 12)) {
+            cost(x) { if (hasUpgrade("q", 11)) {
                 return new Decimal(1).mul(new Decimal (1.25).pow(player.q.buyables[11]))
             } else {
                 return new Decimal(1).mul(new Decimal (1.5).pow(player.q.buyables[11]))
@@ -62,7 +59,7 @@ addLayer("q", {
                 setBuyableAmount("q", 11, getBuyableAmount("q", 11).add(1))
             },
             effect(){
-                let effect = new Decimal(0.5).mul(getBuyableAmount("q", 11))
+                let effect = new Decimal(2.5).mul(getBuyableAmount("q", 11))
                 return effect
             },
         },
