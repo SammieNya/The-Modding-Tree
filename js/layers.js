@@ -56,22 +56,38 @@ addLayer("q", {
                 return new Decimal(1).mul(new Decimal (1.5).pow(player.q.buyables[11]))
             } },
             display() { return "Cost: " + format(this.cost()) + " Quarks. Amount: " + formatWhole(player.q.buyables[11])},
-            canAfford() { return player[this.layer].points.gte(this.cost())},
+            canAfford() { return player.q.points.gte(this.cost())},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
-                player[this.layer].buyables[11] = player[this.layer].buyables[11].add(1)
+                setBuyableAmount("q", 11, getBuyableAmount("q", 11).add(1))
+            },
+            effect(){
+                let effect = new Decimal(0.5).mul(getBuyableAmount("q", 11))
+                return effect
             },
         },
         12: {
             title: "Down Quarks",
-            cost(x) {return new Decimal(2.14).mul(new Decimal (1.25).pow(player.q.buyables[12]))},
-            display() { return "Cost: " + format(this.cost(x)) + " Up Quarks. Amount: " + formatWhole(player.q.buyables[12])},
+            display() { return "Cost: " + format(this.cost(x)) + " Base and Up Quarks. Amount: " + formatWhole(player.q.buyables[12]) + " Multiplies Point Gain by x" + format(this.effect())},
+            cost(x) { 
+                return new Decimal(2.14).mul(new Decimal(1).pow(player.q.buyables[12]))
+            },
             canAfford() {return player[this.layer].buyables[11].gte(this.cost())},
             buy(){
-                player[this.layer].buyables[11] = player[this.layer].buyables[11].sub(this.cost())
-                player[this.layer].buyables[12] = player[this.layer].buyables[12].add(1)
+                if (player[this.layer].points >= this.cost() && player[this.layer].buyables[11] >= this.cost()) {
+
+                player[this.layer].buyables[11] = player[this.layer].buyables[11].sub(this.cost());
+                player[this.layer].buyables[12] = player[this.layer].buyables[12].add(1);
+                player[this.layer].points = player[this.layer].points.sub(this.cost());
+                }
             },
-            currencyInternalName: 11,
+            currencyDisplayName: "2 Base Quarks, 2 Up Quarks",
+            currencyLayer: "q",
+            currencyInternalName: "Quarks", 
+            effect(){
+                let effect = new Decimal(1.1).mul(getBuyableAmount("q", 12))
+                return effect
+            },
         },
 }
 })
