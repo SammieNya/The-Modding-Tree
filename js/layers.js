@@ -8,12 +8,19 @@ addLayer("q", {
 		points: new Decimal(0),
     }},
     color: "#4BDC13",
-    requires: new Decimal(10), // Can be a function that takes requirement increases into account
-    resource: "Quarks", // Name of prestige currency
+    requires: new Decimal(5), // Can be a function that takes requirement increases into account
+    resource: "Base Quarks", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.5, // Prestige currency exponent
+    exponent(x) { if(hasUpgrade("q", 15)){
+        return new Decimal(0.6)
+    }
+    else {
+        return new Decimal(0.5)
+    }
+
+}, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -32,53 +39,161 @@ addLayer("q", {
     upgrades: {
         rows: 5,
         cols: 5,
-        
         11: {
-            title: "More Up Quarks",
-            description: "Makes Up Quarks scale at half speed.",
-            cost: new Decimal(5),
+            title: "Stimulate Up Quarks",
+            description: "Double Up Quarks Base Point Gain",
+            cost: new Decimal(3),
             currencyDisplayName: "Up Quarks",
             currencyLocation() {return player[this.layer].buyables},
             currencyInternalName: 11,
         },
+        
         12: {
+            title: "More Up Quarks",
+            description: "Makes Up Quarks cost scale at slower. Also unlock Down Quarks",
+            cost: new Decimal(5),
+            currencyDisplayName: "Up Quarks",
+            currencyLocation() {return player[this.layer].buyables},
+            currencyInternalName: 11,
+            unlocked() { return hasUpgrade("q", 11)},
+        },
+        13: {
+            title: "Stimulate Down Quarks",
+            description: "Double Down Quark effect.",
+            cost: new Decimal(3),
+            currencyDisplayName: "Down Quarks",
+            currencyLocation() {return player[this.layer].buyables},
+            currencyInternalName: 12,
+            unlocked() { return hasUpgrade("q", 12)},
+        },
+        14: {
             title: "More Down Quarks",
-            description: "Down Quarks scale at half speed.",
+            description: "Down Quarks cost scale at slower.",
             cost: new Decimal(5),
             currencyDisplayName: "Down Quarks",
             currencyLocation() {return player[this.layer].buyables},
             currencyInternalName: 12,
+            unlocked() { return hasUpgrade("q", 13)},
+        },
+        15: {
+            title: "Faster Base Quarks",
+            description: "Buffs the Base Quark Exponent. Also unlocks Strange Quarks.",
+            cost: new Decimal (50),
+            unlocked() { return hasUpgrade("q", 14)},
+        },
+        21: {
+            title: "Up Booster",
+            description: "Double Up Quark Point Gain.",
+            cost: new Decimal(3),
+            currencyDisplayName: "Strange Quarks",
+            currencyLocation() {return player[this.layer].buyables},
+            currencyInternalName: 21,
+            unlocked() { return hasUpgrade("q", 15)},
+        },
+        22: {
+            title: "Placeholder",
+            description: "placeholder",
+            cost: new Decimal(4),
+            currencyDisplayName: "Strange Quarks",
+            currencyLocation() {return player[this.layer].buyables},
+            currencyInternalName: 21,
+            unlocked() { return hasUpgrade("q", 21)},
+        },
+        23: {
+            title: "Placeholder"
+        },
+        24: {
+            title: "Placeholder"
+        },
+        25: {
+            title: "Placeholder"
+        },
+        31: {
+            title: "Placeholder"
+        },
+        32: {
+            title: "Placeholder"
+        },
+        33: {
+            title: "Placeholder"
+        },
+        34: {
+            title: "Placeholder"
+        },
+        35: {
+            title: "Placeholder"
+        },
+        41: {
+            title: "Placeholder"
+        },
+        42: {
+            title: "Placeholder"
+        },
+        43: {
+            title: "Placeholder"
+        },
+        44: {
+            title: "Placeholder"
+        },
+        45: {
+            title: "Placeholder"
+        },
+        51: {
+            title: "Placeholder"
+        },
+        52: {
+            title: "Placeholder"
+        },
+        53: {
+            title: "Placeholder"
+        },
+        54: {
+            title: "Placeholder"
+        },
+        55: {
+            title: "Placeholder"
         },
     },
     buyables: {
-        rows: 1,
+        rows: 3,
         cols: 2,
         11: { 
             title: "Up Quarks",
-            cost(x) { if (hasUpgrade("q", 11)) {
-                return new Decimal(1).mul(new Decimal (1.25).pow(player.q.buyables[11]))
+            cost(x) { if (hasUpgrade("q", 12)) {
+                return new Decimal(2).mul(new Decimal (1.4).pow(player.q.buyables[11]))
             } else {
-                return new Decimal(1).mul(new Decimal (1.5).pow(player.q.buyables[11]))
+                return new Decimal(2).mul(new Decimal (1.5).pow(player.q.buyables[11]))
             } },
-            display() { return "Cost: " + format(this.cost()) + " Quarks. Amount: " + formatWhole(player.q.buyables[11])},
+            display() { return "Cost: " + formatWhole(this.cost()) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[11])},
             canAfford() { return player.q.points.gte(this.cost())},
             buy(){
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount("q", 11, getBuyableAmount("q", 11).add(1))
             },
-            effect(){
-                let effect = new Decimal(0.5).mul(getBuyableAmount("q", 11))
+            effect(x) { if (hasUpgrade("q", 21)) {
+                let effect = new Decimal(2.5).mul(getBuyableAmount("q", 11))
                 return effect
+            }
+            else { if (hasUpgrade("q", 11)) {
+                let effect = new Decimal(2).mul(getBuyableAmount("q", 11))
+                return effect
+            }
+            else {
+                let effect = new Decimal(1).mul(getBuyableAmount("q", 11))
+                return effect
+            }
+        }
+            
             },
         },
         12: {
             title: "Down Quarks",
-            display() { return "Cost: " + format(this.cost(x)) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[12]) + " Multiplies Point Gain by x" + format(this.effect())},
-            cost(x) { if (hasUpgrade("q", 12)) {
-                return new Decimal(2.14).mul(new Decimal(1.35).pow(player.q.buyables[12]))
+            display() { return "Cost: " + formatWhole(this.cost(x)) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[12]) + " Multiplies Point Gain by x" + format(this.effect())},
+            cost(x) { if (hasUpgrade("q", 14)) {
+                return new Decimal(5).mul(new Decimal(1.4).pow(player.q.buyables[12]))
             }
             else {
-                return new Decimal(2.14).mul(new Decimal(1.7).pow(player.q.buyables[12]))
+                return new Decimal(5).mul(new Decimal(1.6).pow(player.q.buyables[12]))
             }
                 
             },
@@ -87,13 +202,50 @@ addLayer("q", {
                 player[this.layer].points = player[this.layer].points.sub(this.cost());
                 setBuyableAmount("q", 12, getBuyableAmount("q", 12).add(1)) ;
             },
-            currencyDisplayName: "2 Base Quarks, 2 Up Quarks",
-            currencyLayer: "q",
-            currencyInternalName: "Quarks", 
-            effect(){
-                let effect = new Decimal(1.1).mul(getBuyableAmount("q", 12))
+            effect(x){ if (hasUpgrade("q", 13)) {
+                let effect = new Decimal(2.6).mul(getBuyableAmount("q", 12))
                 return effect
+            }
+            else {
+                let effect = new Decimal(1.3).mul(getBuyableAmount("q", 12))
+                return effect
+            }
             },
+            unlocked() { return hasUpgrade("q", 12)},
+        },
+        21: {
+            title: "Strange Quarks",
+            display() { return "Cost: " + formatWhole(this.cost(x)) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[21]) + " Multiplies Point gain by x" + format(this.effect())},
+            cost(x) { return new Decimal(101).mul(new Decimal(2.5).pow(player.q.buyables[21]))},
+            canAfford() {return player[this.layer].points.gte(this.cost())},
+            unlocked() { return hasUpgrade("q", 15)},
+            buy() {
+                player[this.layer].points = player[this.layer].points.sub(this.cost());
+                setBuyableAmount("q", 21, getBuyableAmount("q", 21).add(1));
+            },
+            effect(x) {
+                let effect = new Decimal(1.25).mul(getBuyableAmount("q", 21))
+                return effect
+            }
+
+        },
+        22: {
+            title: "Charm Quark",
+            display() { return "Cost: " + formatWhole(this.cost(x)) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[22])},
+            cost(x) { return new Decimal(1300)},
+            canAfford() {return player[this.layer].points.gte(this.cost())}
+        },
+        31: {
+            title: "Bottom Quark",
+            display() { return "Cost: " + formatWhole(this.cost(x)) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[31])},
+            cost(x) { return new Decimal(4200)},
+            canAfford() {return player[this.layer].points.gte(this.cost())}
+        },
+        32: {
+            title: "Top Quark",
+            display() { return "Cost: " + formatWhole(this.cost(x)) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[32])},
+            cost(x) { return new Decimal(171000)},
+            canAfford() {return player[this.layer].points.gte(this.cost())}
         },
 }
 })
@@ -120,7 +272,7 @@ addLayer("h", {
         return new Decimal (1)
     },
     currencyLayer: "q",
-    layerShown() { if (hasUpgrade ("q", 11)) return true, {
+    layerShown() { if (hasUpgrade ("q", 12)) return true, {
         
     } }
 })
