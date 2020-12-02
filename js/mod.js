@@ -6,15 +6,15 @@ let modInfo = {
 	discordName: "Sammie",
 	discordLink: "",
 	changelogLink: "https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	initialStartPoints: new Decimal (5), // Used for hard resets and new players
 	
 	offlineLimit: 1,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.12",
-	name: "Down Quarks",
+	num: "0.13",
+	name: "Strange Strange Quarks",
 }
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
@@ -37,6 +37,7 @@ function getPointGen() {
 
 	let gain = new Decimal(1)
 	gain = gain.add(buyableEffect("q", 11))
+	gain = gain.sub(buyableEffect("q", 11).div(new Decimal(10)))
 	gain = gain.mul(buyableEffect("q", 12).add(1))
 	gain = gain.mul(buyableEffect("q", 21).add(1))
 	

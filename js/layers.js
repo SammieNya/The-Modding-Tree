@@ -100,58 +100,76 @@ addLayer("q", {
             unlocked() { return hasUpgrade("q", 21)},
         },
         23: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 22)},
         },
         24: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 23)},
         },
         25: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 24)},
         },
         31: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 25)},
         },
         32: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 31)},
         },
         33: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 32)},
         },
         34: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 33)},
         },
         35: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 34)},
         },
         41: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 35)},
         },
         42: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 41)},
         },
         43: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 42)},
         },
         44: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 43)},
         },
         45: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 44)},
         },
         51: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 45)},
         },
         52: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 51)},
         },
         53: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 52)},
         },
         54: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 53)},
         },
         55: {
-            title: "Placeholder"
+            title: "Placeholder",
+            unlocked() { return hasUpgrade("q", 54)},
         },
     },
     buyables: {
@@ -215,7 +233,7 @@ addLayer("q", {
         },
         21: {
             title: "Strange Quarks",
-            display() { return "Cost: " + formatWhole(this.cost(x)) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[21]) + " Multiplies Point gain by x" + format(this.effect())},
+            display() { return "Cost: " + formatWhole(this.cost(x)) + " Base Quarks. Amount: " + formatWhole(player.q.buyables[21]) + " Subtracts "+ format(this.effect()) + " From Point gain BEFORE multipliers. Then multiplies Point gain by x" + format(this.effect())},
             cost(x) { return new Decimal(101).mul(new Decimal(2.5).pow(player.q.buyables[21]))},
             canAfford() {return player[this.layer].points.gte(this.cost())},
             unlocked() { return hasUpgrade("q", 15)},
