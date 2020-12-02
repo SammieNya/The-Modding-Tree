@@ -34,8 +34,9 @@ addLayer("q", {
     ],
     layerShown(){ if (player.points >= 0) return true, {
         
-    } },
-    
+    }},
+    effect() {let effect = new Decimal(1).add(1).pow(player.q.points)
+        return effect},
     upgrades: {
         rows: 5,
         cols: 5,
@@ -92,7 +93,7 @@ addLayer("q", {
         },
         22: {
             title: "Placeholder",
-            description: "placeholder",
+            description: "Base Quarks multiply Point Gain",
             cost: new Decimal(4),
             currencyDisplayName: "Strange Quarks",
             currencyLocation() {return player[this.layer].buyables},
@@ -168,7 +169,8 @@ addLayer("q", {
             unlocked() { return hasUpgrade("q", 53)},
         },
         55: {
-            title: "Placeholder",
+            title: "Begin Combination",
+            description: "Unlock Hadrons",
             unlocked() { return hasUpgrade("q", 54)},
         },
     },
@@ -290,7 +292,7 @@ addLayer("h", {
         return new Decimal (1)
     },
     currencyLayer: "q",
-    layerShown() { if (hasUpgrade ("q", 12)) return true, {
+    layerShown() { if (hasUpgrade ("q", 55)) return true, {
         
     } }
 })
